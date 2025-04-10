@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -19,11 +20,22 @@ import static org.junit.Assert.assertEquals;
 
 public class MyStepdefs {
    private WebDriver driver;
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+   private WebDriverWait wait;
+   //privat metod med explicit wait
+    private WebElement waitForClickableElement(By locator){
+        return wait.until(ExpectedConditions.elementToBeClickable(locator));
+    }
+    private void initializeWait(){
+        if(driver != null){
+            wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        }
+    }
+
 
     @Given("I am on basketballengland page")
     public void iAmOnBasketballenglandPage() {
         driver = new ChromeDriver();
+        initializeWait();
         driver.get("https://membership.basketballengland.co.uk/NewSupporterAccount");
 
     }
@@ -40,7 +52,7 @@ public class MyStepdefs {
                 throw new IllegalAccessException("UNSUPORTED BROWESER" + browser);
         }
 
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        initializeWait();
         driver.get("https://membership.basketballengland.co.uk/NewSupporterAccount");
 
 
@@ -111,9 +123,6 @@ public class MyStepdefs {
         driver.findElement(By.cssSelector("label[for=\"fanmembersignup_agreetocodeofethicsandconduct\"] span[class='box']")).click();
 
     }
-
-
-
 
 
     @And("I press confirm and join")
@@ -207,4 +216,6 @@ public class MyStepdefs {
         driver.quit();
 
     }
+
+
 }
