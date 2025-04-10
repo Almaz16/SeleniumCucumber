@@ -23,3 +23,14 @@ Feature: Registration
     When I fill in the correct member details, without confirm terms and Conditions
     And I press confirm and join
     Then I see the error message for the not confirm terms and Conditions
+
+  Scenario Outline: Run registration test in different browsers
+    Given I am on basketballengland page using "<browser>"
+    When I fill in the correct member details
+    And I press confirm and join
+    Then I successfully become a member
+
+    Examples:
+      | browser |
+      | chrome  |
+      | edge    |

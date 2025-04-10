@@ -13,11 +13,12 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 
 public class MyStepdefs {
-    WebDriver driver;
+   private WebDriver driver;
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
     @Given("I am on basketballengland page")
@@ -26,6 +27,25 @@ public class MyStepdefs {
         driver.get("https://membership.basketballengland.co.uk/NewSupporterAccount");
 
     }
+    @Given("I am on basketballengland page using {string}")
+    public void iAmOnBasketballenglandPageUsing(String browser) throws IllegalAccessException {
+        switch (browser.toLowerCase()){
+            case "chrome":
+                driver = new ChromeDriver();
+                break;
+            case "edge":
+                driver = new EdgeDriver();
+                break;
+            default:
+                throw new IllegalAccessException("UNSUPORTED BROWESER" + browser);
+        }
+
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get("https://membership.basketballengland.co.uk/NewSupporterAccount");
+
+
+    }
+
 
     @When("I fill in the correct member details")
     public void iFillInTheCorrectMemberDetails() throws InterruptedException {
@@ -60,7 +80,7 @@ public class MyStepdefs {
         String expected = "THANK YOU FOR CREATING AN ACCOUNT WITH BASKETBALL ENGLAND";
         String actual = driver.findElement(By.xpath("/html/body/div/div[2]/div/h2")).getText();
         assertEquals(expected, actual);
-        System.out.println("DET GICK!!!");
+        System.out.println("we sent you an email to verify your email address (check your ");
         driver.quit();
     }
 
